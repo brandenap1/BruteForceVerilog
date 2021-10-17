@@ -49,5 +49,5 @@ always @(posedge i_clk) begin //random value for cpu_type
       o_cpu_type <= HEAVY;        
 end
 
-
+          
 endmodule
