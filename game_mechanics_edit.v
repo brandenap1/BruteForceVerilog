@@ -24,9 +24,9 @@ module game_mechanics_edit(i_clk, i_reset, i_types, i_start_temp, o_cpu_health, 
 
 input i_clk;
 input i_reset;
-input [1:0] i_types;
+input [3:0] i_types;
 input i_start_temp;
-wire [1:0] w_cpu_type;
+wire [3:0] w_cpu_type;
 wire [1:0] w_cpu_state;
 wire [1:0] w_player_state;
 reg r_isPlayer;
@@ -45,9 +45,9 @@ parameter NO_HIT = 2'b00,
         MISS = 2'b11;
 
 // defining player and cpu attack states
-cpu_type ctype(.i_clk(i_clk),.i_reset(i_reset),.w_cpu_type(w_cpu_type)); //generate random cpu attack type
+cpu_type ctype(.i_clk(i_clk),.i_reset(i_reset),.o_cpu_type(w_cpu_type)); //generate random cpu attack type
 attack_state play(.i_clk(i_clk), .i_reset(i_reset), .i_type(i_types), .i_isPlayer(1),  .o_state(w_player_state));
-attack_state cpu(.i_clk(i_clk), .i_reset(i_reset), .i_type(cpu_type), .i_isPlayer(0),.o_state(w_cpu_state));
+attack_state cpu(.i_clk(i_clk), .i_reset(i_reset), .i_type(w_cpu_type), .i_isPlayer(0),.o_state(w_cpu_state));
 
     
 always @ (posedge i_clk) begin
