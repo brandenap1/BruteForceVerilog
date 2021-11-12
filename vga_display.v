@@ -21,17 +21,18 @@
 
 
 module vga_display(
-    input wire i_clk, i_round_start, i_pause,
-    input [3:0] move_out,
+    input wire clk, reset,
+    input [3:0] move_out, round_start, pause,
 //    input wire [3:0] p1_health_out, cpu_health_out,
 //    input wire [3:0] keyboard_input,
-    output wire o_hSync, o_vSync,
-    output wire [11:0] o_VGA
+    output wire hSync, vSync,
+//    output wire [3:0] VGA_Red, VGA_Blue, VGA_Green
+    output wire [11:0] VGA
     );
     
     reg [15:0] count;
     reg pixel_strobe;
-    always @(posedge i_clk)
+    always @(posedge clk)
         {pixel_strobe, count} = count + 16'h4000;
     wire [9:0] x;
     wire [8:0] y;
@@ -42,7 +43,7 @@ module vga_display(
     end
     
     
-    vga_controller display (.clk_25mhz(i_clk), .pixel_strobe(pixel_strobe), .hSync(o_hSync), .vSync(o_vSync), .xPos(x), .yPos(y));
+    vga_controller display (.clk_25mhz(clk), .pixel_strobe(pixel_strobe), .hSync(hSync), .vSync(vSync), .xPos(x), .yPos(y));
     // player_sprite sprite (outpum player1)
     // cpu_sprite sprite (output cpu)
     
@@ -214,7 +215,7 @@ module vga_display(
 	reg [11:0] playerHealthBarFull, cpuHealthBarFull;
 
 	
-	always @(posedge i_clk) begin
+	always @(posedge clk) begin
 //	if (p1_health_out > 0 && cpu_health_out <= 0) begin
 //	   //cpu dead sprite
 //    else if (p1_health_out <= 0 && cpu_health_out > 0) begin
@@ -224,9 +225,9 @@ module vga_display(
 //    else if (cpu is attacking) begin
 //	else begin
 //	   //idle sprites
-      if (i_round_start) begin
+      if (round_start) begin
 //////////////////////////////////////
-          if (move_out == 4'b0001 && i_pause == 0) begin
+          if (move_out == 4'b0001 && pause == 0) begin
     //This is for when player is attacking
     //	   if(keyboard_input == 4'b0010 || keyboard_input == 4'b0001)
     //	   begin
@@ -1099,7 +1100,7 @@ module vga_display(
 	
 	// VGA
 	
-     assign o_VGA[11:0] = playerL11 | playerL21 | playerL22 | playerL23 | playerL24 | playerL25 | playerL26 | playerL31 | playerL32 | playerL33 | playerL34 | playerL35 | playerL36 |playerL41 | playerL42 | playerL43 | playerL44 | playerL45 | playerL46 | playerL47 | 
+     assign VGA[11:0] = playerL11 | playerL21 | playerL22 | playerL23 | playerL24 | playerL25 | playerL26 | playerL31 | playerL32 | playerL33 | playerL34 | playerL35 | playerL36 |playerL41 | playerL42 | playerL43 | playerL44 | playerL45 | playerL46 | playerL47 | 
      playerL51 | playerL52 | playerL53 | playerL54 | playerL55 | playerL56 | playerL57 | playerL58 | playerL61 | playerL62 | playerL63 | playerL64 | playerL65 | playerL66 | playerL67 | playerL68 | playerL71 |
       playerL72 | playerL73 | playerL74 | playerL75 | playerL76 | playerL77 | playerL78 | playerL79 | playerL81 | playerL82 | playerL83 | playerL84 | playerL85 | playerL86 | playerL87 |
        playerL91 | playerL92 | playerL93 | playerL101 | playerL111 | playerL121 | playerL122 | playerL131 | playerL132 | cpuL11 | cpuL21 | cpuL22 | cpuL23 | cpuL24 | cpuL25 | cpuL26 | cpuL31 | cpuL32 | cpuL33 | cpuL34 | cpuL35 | cpuL36 |cpuL41 | cpuL42 | cpuL43 | cpuL44 | cpuL45 | cpuL46 | cpuL47 | 
