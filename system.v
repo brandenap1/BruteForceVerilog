@@ -31,7 +31,7 @@ input i_data;
 output [3:0] o_digit;
 output [6:0] o_segment;
 output [11:0] o_VGA;
-output hSync, o_vSync;
+output o_hSync, o_vSync;
 //output [9:0] led;
 reg [1:0] r_types;
 wire w_cpu_clk;
